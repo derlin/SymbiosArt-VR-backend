@@ -5,9 +5,7 @@ import com.mongodb.client.MongoCollection;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.bson.Document;
-import utils.DataContainer;
-import utils.MongoUtils;
-import utils.SolrUtils;
+import utils.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,13 +20,20 @@ public class BatchInserter{
 
     private MongoCollection<Document> photoCollection;
     private SolrClient solrClient;
+    private DataCreator dataCreator;
+
+    @FunctionalInterface
+    public  interface DataCreator {
+        public IDataContainer create(String json);
+    }
 
     // ----------------------------------------------------
 
 
-    public BatchInserter(){
-        photoCollection = MongoUtils.getPhotoCollection();
-        solrClient = SolrUtils.createClient("core1");
+    public BatchInserter(String mongoCollection, String solrCore, DataCreator creator){
+        dataCreator = creator;
+        photoCollection = MongoUtils.getCollection(mongoCollection);
+        solrClient = SolrUtils.createClient(solrCore);
     }
 
     // ----------------------------------------------------
@@ -62,8 +67,8 @@ public class BatchInserter{
 
         // insert all from file, return the number of lines actually added
         try( Stream<String> stream = Files.lines( Paths.get( filepath ) ) ){
-            int sum = stream.map( DataContainer::new )  //
-                    .map( DataContainer::toSolrInputDoc ) //
+            int sum = stream.map( dataCreator::create )  //
+                    .map( IDataContainer::toSolrInputDoc ) //
                     .mapToInt( d -> {
                 try{
                     solrClient.add( d );
@@ -92,13 +97,13 @@ public class BatchInserter{
 
 
     private boolean insertOne( String json ){
-        DataContainer data = new DataContainer( json );
+        IDataContainer data = dataCreator.create( json );
         Document mongoDoc = data.toMongoDoc();
 
         try{
             photoCollection.insertOne( mongoDoc );
             solrClient.add( data.toSolrInputDoc() );
-            System.out.printf( "%s inserted.\n", mongoDoc.get( "_id" ) );
+            System.out.printf( "%s inserted.\n", mongoDoc.get( "_id" ).toString() );
             return true;
 
         }catch( MongoException e ){
@@ -125,7 +130,7 @@ public class BatchInserter{
             System.exit( 0 );
         }
 
-        BatchInserter inserter = new BatchInserter();
+        BatchInserter inserter = new BatchInserter("mirflickr", "mirflickr", MirflickrContainer::new);
 
         int sum = inserter.indexAll( args[ 0 ] );
 
