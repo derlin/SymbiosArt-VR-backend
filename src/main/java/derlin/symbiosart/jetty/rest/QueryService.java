@@ -1,18 +1,18 @@
-package jetty.rest;
+package derlin.symbiosart.jetty.rest;
 
 /**
  * @author: Lucy Linder
  * @date: 26.12.2015
  */
 
-import query.MirflickrQuerier;
-import utils.Common;
+import derlin.symbiosart.query.MirflickrQuerier;
+import derlin.symbiosart.utils.Common;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path( "/rest" )
+@Path( "/" )
 public class QueryService{
 
     private MirflickrQuerier querier = new MirflickrQuerier( "mirflickr" );
@@ -29,7 +29,7 @@ public class QueryService{
 
     // curl -v -X POST -H 'Accept:application/xml' http://localhost:8000/rest/example/tagvector
     @POST
-    @Path( "/example/tagvector" )
+    @Path( "/example/tagsvector" )
     @Produces({MediaType.APPLICATION_JSON,  MediaType.APPLICATION_XML})
     public Common.TagsVector gelt( ){
         Common.TagsVector vector = new Common.TagsVector();

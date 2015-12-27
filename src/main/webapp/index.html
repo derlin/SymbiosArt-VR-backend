@@ -1,0 +1,183 @@
+<html>
+<head>
+    <title>JAX-RS SymbiosArt Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="js/theme.min.css"/>
+    <script src="js/jquery-2.1.4.min.js"></script>
+
+    <style type="text/css">
+        pre {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .string {
+            color: green;
+        }
+
+        .number {
+            color: darkorange;
+        }
+
+        .boolean {
+            color: blue;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: red;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function getImages(){
+
+            var nbr = parseInt( $( '#Nbr' ).val() );
+            if( isNaN( nbr ) ) nbr = 10;
+
+            var jsonTags = "";
+            if( $( 'input[type=checkbox]' ).first().is( ":checked" ) ){
+                jsonTags = $( '#TagsVectorRaw' ).val();
+            }else{
+                var tags = [];
+                var csv = $( '#TagsVector' ).val().replace( " ", "" ).split( "," );
+
+                csv.forEach( function( val ){
+                    var a = val.split( ":" );
+                    var tag = "\"" + a[0] + "\":";
+                    if( a.length < 2 || isNaN( parseInt( a[1] ) ) ){
+                        console.log( "error : " );
+                        console.log( a );
+                        tag += "1"
+                    }else{
+                        tag += parseInt( a[1] );
+                    }
+                    tags.push( tag );
+                } );
+
+                jsonTags = "{" + tags.join( ", " ) + "}";
+            }
+
+            var url = "/rest/get/" + nbr;
+            console.log( url );
+            console.log( jsonTags );
+
+            $.ajax( {
+                        'headers' : {
+                            'Accept'      : 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        'type'    : 'POST',
+                        'url'     : url,
+                        'data'    : jsonTags,
+                        'dataType': 'json',
+                        'success' : function( data ){
+                            console.log( data );
+                            $( '#result' ).html( '<pre>' + syntaxHighlight( JSON.stringify( data, undefined, 4 ) ) + '</pre>' );
+                        }
+                    } )
+                    .fail( function(){
+                        console.log( "error" );
+                    } )
+                    .always( function(){
+                        $( "#status" ).text( "Status: Complete." );
+                    } );
+
+        }
+
+        function syntaxHighlight( json ){
+            json = json.replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+            return json.replace( /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function( match ){
+                var cls = 'number';
+                if( /^"/.test( match ) ){
+                    if( /:$/.test( match ) ){
+                        cls = 'key';
+                    }else{
+                        cls = 'string';
+                    }
+                }else if( /true|false/.test( match ) ){
+                    cls = 'boolean';
+                }else if( /null/.test( match ) ){
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            } );
+        }
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">SymbiosArt</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container container-fluid">
+
+    <h4>JAX-RS Client</h4>
+
+    <div class="well">
+        <form>
+            <div class="form-group">
+                <label for="Nbr">Tags (tagname:wheight,)</label>
+                <input type="number" class="form-control" id="Nbr" value="10" placeholder="nbr of results">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Use JSON field
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="TagsVector">Tags (tagname:wheight,)</label>
+                <input type="text" class="form-control" id="TagsVector" placeholder="Tags">
+            </div>
+
+            <div class="form-group">
+                <label for="TagsVectorRaw">Password</label>
+                <textarea class="form-control" id="TagsVectorRaw" placeholder="TagsVector JSON">{ }</textarea>
+            </div>
+            <button class="btn btn-primary" onclick="getImages();return false;">Submit</button>
+        </form>
+    </div>
+
+    <div id="content">
+        <div id="contentList">
+            <div><p id="status">Status: Waiting...</p></div>
+            <div id="request"></div>
+            <div>Result:
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+    <div>
+
+        <p>
+            Welcome to the JAX-RS SymbiosArt Application. The following paths are supported for GET requests:
+        </p>
+
+<pre>
+/rest/get/{nbr results}
+</pre>
+
+        <p>
+            All of these paths return a JSON object containing the result.
+        </p>
+
+        <p>
+            The request body must be a JSON object similar to the above ("result" is of course optional). The
+            response will be JSON as above.
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

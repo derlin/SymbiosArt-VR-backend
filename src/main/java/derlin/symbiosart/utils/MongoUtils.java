@@ -1,4 +1,4 @@
-package utils;
+package derlin.symbiosart.utils;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;

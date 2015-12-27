@@ -1,11 +1,11 @@
-package query;
+package derlin.symbiosart.query;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import utils.Common;
-import utils.SolrUtils;
+import derlin.symbiosart.utils.Common;
+import derlin.symbiosart.utils.SolrUtils;
 
 import java.io.IOException;
 import java.util.List;

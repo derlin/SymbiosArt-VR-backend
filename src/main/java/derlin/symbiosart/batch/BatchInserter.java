@@ -1,11 +1,11 @@
-package batch;
+package derlin.symbiosart.batch;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.bson.Document;
-import utils.*;
+import derlin.symbiosart.utils.*;
 
 import java.io.IOException;
 import java.nio.file.Files;

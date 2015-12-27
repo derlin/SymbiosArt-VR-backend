@@ -1,4 +1,4 @@
-package utils;
+package derlin.symbiosart.utils;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;

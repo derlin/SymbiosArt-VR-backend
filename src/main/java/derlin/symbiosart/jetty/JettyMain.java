@@ -1,4 +1,4 @@
-package jetty;
+package derlin.symbiosart.jetty;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -23,7 +23,7 @@ public class JettyMain{
         jerseyServlet.setInitOrder( 1 );
         // Tells the Jersey Servlet which REST service/class to load.
         jerseyServlet.setInitParameter( "jersey.config.server.provider.packages", //
-                "jetty.rest;org.codehaus.jackson.jaxrs" );
+                "derlin.symbiosart.jetty.rest;org.codehaus.jackson.jaxrs" );
         jettyServer.start();
         jettyServer.join();
     }

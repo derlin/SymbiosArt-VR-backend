@@ -1,4 +1,4 @@
-package query;
+package derlin.symbiosart.query;
 
 import com.mongodb.client.MongoCollection;
 import org.apache.solr.client.solrj.SolrClient;
@@ -6,8 +6,8 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.bson.Document;
-import utils.MongoUtils;
-import utils.SolrUtils;
+import derlin.symbiosart.utils.MongoUtils;
+import derlin.symbiosart.utils.SolrUtils;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package utils;
+package derlin.symbiosart.utils;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
