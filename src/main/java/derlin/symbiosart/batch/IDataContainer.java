@@ -1,4 +1,4 @@
-package derlin.symbiosart.utils;
+package derlin.symbiosart.batch;
 
 /**
  * @author: Lucy Linder

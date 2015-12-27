@@ -14,16 +14,13 @@ public class MongoUtils{
 
     public final static String HOST = "dulcolax.local";
     public final static String DEFAULT_DB = "mydb";
-    public final static String PHOTOS_COLLECTION = "test";
 
     private static final MongoClient MONGO_CLIENT = new MongoClient(HOST);
     private static final MongoDatabase MONGO_DB = MONGO_CLIENT.getDatabase( DEFAULT_DB );
 
     // ----------------------------------------------------
 
-    public static MongoCollection<Document> getPhotoCollection( ){
-        return getCollection( PHOTOS_COLLECTION );
-    }
+
     public static MongoCollection<Document> getCollection( String coll ){
         return MONGO_DB.getCollection( coll );
     }
@@ -32,7 +29,7 @@ public class MongoUtils{
 
 
     public static void main( String[] args ){
-        FindIterable<Document> documents = getPhotoCollection().find();
+        FindIterable<Document> documents = getCollection("collection").find();
         System.out.println(documents);
     }//end main
 

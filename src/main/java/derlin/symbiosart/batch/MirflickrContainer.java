@@ -1,4 +1,4 @@
-package derlin.symbiosart.utils;
+package derlin.symbiosart.batch;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
