@@ -1,5 +1,6 @@
 package derlin.symbiosart.api;
 
+import derlin.symbiosart.jetty.WebAppLauncher;
 import derlin.symbiosart.pojo.TagsVector;
 import org.bson.Document;
 
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
 public class MirflickrApi extends Api{
 
     private static final String SOLR_CORE = "mirflickr";
-
 
     @Override
     public String getSolrCore(){
@@ -35,6 +35,8 @@ public class MirflickrApi extends Api{
                 .map( m -> {
                     Document d = new Document( "_id", m.getKey() );
                     d.put( "tags", m.getValue() );
+                    // add custom url
+                    d.put("url", String.format( "%smirflickr/im%s.jpg",WebAppLauncher.SERVER_URL, m.getKey()) );
                     return d;
                 } ) //
                 .collect( Collectors.toList() );

@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-	<servlet>
-		<servlet-name>SymbiosArt</servlet-name>
-		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>derlin.symbiosart.jetty.SymbiosArtApp</param-value>
-		</init-param>
-		<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>derlin.symbiosart.jetty;org.codehaus.jackson.jaxrs</param-value>
-		</init-param>
-	</servlet>
+    <servlet>
+        <servlet-name>SymbiosArt</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>derlin.symbiosart.jetty.SymbiosArtApp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>derlin.symbiosart.jetty;org.codehaus.jackson.jaxrs</param-value>
+        </init-param>
+    </servlet>
 
-	<servlet-mapping>
-		<servlet-name>SymbiosArt</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
+    <!-- serve mirflickr images -->
+    <!-- to do it in code: -->
+    <!--
+        String homePath = System.getProperty( "user.home" );
+        ServletHolder holderHome = new ServletHolder( "static-home", DefaultServlet.class );
+        holderHome.setInitParameter( "resourceBase", homePath + "/Desktop/mirflickr/img" );
+        holderHome.setInitParameter( "dirAllowed", "true" );
+        holderHome.setInitParameter( "pathInfoOnly", "true" );
+        context.addServlet( holderHome, "/mirflickr/*" );
+      -->
+    <servlet>
+        <servlet-name>Static-Content</servlet-name>
+        <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>resourceBase</param-name>
+            <param-value>/home/lucy/Desktop/mirflickr/img</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dirAllowed</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>pathInfoOnly</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SymbiosArt</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Static-Content</servlet-name>
+        <url-pattern>/mirflickr/*</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -6,6 +6,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class WebAppLauncher{
 
     public static final int PORT = 8680;
+    public static final String SERVER_URL = "http://localhost:" + PORT + "/";
 
 
     public static void main( String[] args ) throws Exception{
@@ -13,6 +14,7 @@ public class WebAppLauncher{
         Server server = new Server( PORT );
 
         WebAppContext context = new WebAppContext();
+        context.setParentLoaderPriority( true );
         context.setDescriptor( WebAppLauncher.class.getResource( "/WEB-INF/web.xml" ).toString() );
         context.setResourceBase( WebAppLauncher.class.getResource( "/" ).getPath() );
         context.setContextPath( "/" );

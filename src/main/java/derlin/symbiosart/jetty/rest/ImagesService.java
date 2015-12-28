@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path( "/" )
-public class QueryService{
+public class ImagesService{
 
     private MirflickrApi api = new MirflickrApi();
 
