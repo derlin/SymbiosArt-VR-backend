@@ -18,6 +18,7 @@
         <gson.version>2.5</gson.version>
         <fongo.version>2.0.4</fongo.version>
         <junit.version>4.11</junit.version>
+        <flickr4j.version>2.11</flickr4j.version>
     </properties>
 
     <build>
@@ -45,6 +46,14 @@
 
 
     <dependencies>
+
+        <!--flickr-->
+        <dependency>
+            <groupId>com.flickr4java</groupId>
+            <artifactId>flickr4java</artifactId>
+            <version>${flickr4j.version}</version>
+        </dependency>
+
         <!--junit-->
         <dependency>
             <groupId>junit</groupId>
@@ -141,7 +150,6 @@
         </dependency>
 
     </dependencies>
-
 
 
 </project>
