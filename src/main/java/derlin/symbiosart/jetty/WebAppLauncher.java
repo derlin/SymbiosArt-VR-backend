@@ -6,7 +6,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class WebAppLauncher{
 
     public static final int PORT = 8680;
-    public static final String SERVER_URL = "http://localhost:" + PORT + "/";
+    public static final String SERVER_URL = "http://192.168.0.23:" + PORT + "/";
 
 
     public static void main( String[] args ) throws Exception{

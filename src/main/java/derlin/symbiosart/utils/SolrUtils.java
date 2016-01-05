@@ -9,7 +9,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
  */
 public class SolrUtils{
 
-    public final static String HOST = "dulcolax.local";
+    public final static String HOST = "localhost"; //"dulcolax.local";
     public final static int PORT = 8983;
 
 

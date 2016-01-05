@@ -12,10 +12,10 @@ import org.bson.Document;
  */
 public class MongoUtils{
 
-    public final static String HOST = "dulcolax.local";
+    public final static String HOST = "localhost";//"dulcolax.local";
     public final static String DEFAULT_DB = "mydb";
 
-    private static final MongoClient MONGO_CLIENT = new MongoClient(HOST);
+    private static final MongoClient MONGO_CLIENT = new MongoClient( HOST );
     private static final MongoDatabase MONGO_DB = MONGO_CLIENT.getDatabase( DEFAULT_DB );
 
     // ----------------------------------------------------
@@ -29,8 +29,8 @@ public class MongoUtils{
 
 
     public static void main( String[] args ){
-        FindIterable<Document> documents = getCollection("collection").find();
-        System.out.println(documents);
+        FindIterable<Document> documents = getCollection( "collection" ).find();
+        System.out.println( documents );
     }//end main
 
 }//end class

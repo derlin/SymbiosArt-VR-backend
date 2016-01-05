@@ -3,6 +3,7 @@ package derlin.symbiosart.pojo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,15 @@ import java.util.stream.Collectors;
  */
 @XmlRootElement
 public class TagsVector extends TreeMap<String, Integer>{
+
+    public TagsVector(){
+    }
+
+
+    public TagsVector( Map<String,Integer> m ){
+        super( m );
+    }
+
 
     @XmlElement( name = "tag" )
     public List<Tag> getForXmlSerialization(){

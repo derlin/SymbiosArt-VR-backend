@@ -1,4 +1,4 @@
-package derlin.symbiosart.api;
+package derlin.symbiosart.api.img;
 
 import derlin.symbiosart.pojo.TagsVector;
 

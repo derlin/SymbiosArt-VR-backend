@@ -1,5 +1,6 @@
-package derlin.symbiosart.api;
+package derlin.symbiosart.api.img;
 
+import com.google.gson.Gson;
 import derlin.symbiosart.jetty.WebAppLauncher;
 import derlin.symbiosart.pojo.TagsVector;
 import org.bson.Document;
@@ -50,10 +51,11 @@ public class MirflickrApi extends Api{
         vector.put( "wedding", 4 );
         vector.put( "sea", -1 );
 
+        System.out.println(new Gson().toJson( vector ));
 
-        MirflickrApi querier = new MirflickrApi();
-        List<Document> images = querier.getSuggestions( vector, 3 );
-        images.forEach( System.out::println );
+//        MirflickrApi querier = new MirflickrApi();
+//        List<Document> images = querier.getSuggestions( vector, 3 );
+//        images.forEach( System.out::println );
     }//end main
 
 
