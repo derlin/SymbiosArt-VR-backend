@@ -5,8 +5,9 @@ package derlin.symbiosart.jetty.rest;
  * @date: 26.12.2015
  */
 
-import derlin.symbiosart.api.user.UserApi;
-import derlin.symbiosart.pojo.User;
+import derlin.symbiosart.api.ApiProvider;
+import derlin.symbiosart.api.commons.Interfaces;
+import derlin.symbiosart.api.user.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,7 +16,7 @@ import java.util.List;
 @Path( "/user" )
 public class UsersService{
 
-    private UserApi api = new UserApi();
+    private Interfaces.IUsersApi api = new ApiProvider().getUsersApi();
 
 
     // curl http://localhost:8680/rest/user/all
@@ -46,7 +47,8 @@ public class UsersService{
         api.addUser( user );
     }
 
-    // curl -X POST -H 'Content-Type:application/json' --data '{"wedding": 2}' http://localhost:8000/rest/username
+    // curl -X POST -H 'Content-Type:application/json' --data '{"name":"test", "tags_vector":{"wedding": 2}}'
+    // http://localhost:8680/rest/user/test
     @POST
     @Path( "/{id}" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
@@ -56,7 +58,7 @@ public class UsersService{
     }
 
 
-    // curl -X DELETE  http://localhost:8000/rest/username
+    // curl -X DELETE  http://localhost:8680/rest/user/test
     @DELETE
     @Path( "/{id}" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )

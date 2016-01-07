@@ -15,12 +15,12 @@
         </init-param>
     </servlet>
 
-    <!-- serve mirflickr images -->
+    <!-- serve static images -->
     <!-- to do it in code: -->
     <!--
         String homePath = System.getProperty( "user.home" );
         ServletHolder holderHome = new ServletHolder( "static-home", DefaultServlet.class );
-        holderHome.setInitParameter( "resourceBase", homePath + "/Desktop/mirflickr/img" );
+        holderHome.setInitParameter( "resourceBase", homePath + <PATH> );
         holderHome.setInitParameter( "dirAllowed", "true" );
         holderHome.setInitParameter( "pathInfoOnly", "true" );
         context.addServlet( holderHome, "/mirflickr/*" );
@@ -30,7 +30,7 @@
         <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
         <init-param>
             <param-name>resourceBase</param-name>
-            <param-value>/home/lucy/Desktop/mirflickr/img</param-value>
+            <param-value>/home/lucy/git/SymbiosArt/all_images</param-value>
         </init-param>
         <init-param>
             <param-name>dirAllowed</param-name>
@@ -49,6 +49,6 @@
 
     <servlet-mapping>
         <servlet-name>Static-Content</servlet-name>
-        <url-pattern>/mirflickr/*</url-pattern>
+        <url-pattern>/images/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -1,7 +1,8 @@
-package derlin.symbiosart.pojo;
+package derlin.symbiosart.api.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import derlin.symbiosart.utils.MongoUtils;
+import derlin.symbiosart.api.commons.Interfaces;
+import derlin.symbiosart.api.commons.TagsVector;
 import org.bson.Document;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,8 +13,7 @@ import java.util.Map;
  * @date: 04.01.2016
  */
 @XmlRootElement
-public class User{
-;
+public class User implements Interfaces.IMongoInsertable{
 
     public static final String MONGO_NAME_KEY = "_id";
     public static final String MONGO_TAGS_KEY = "tags_vector";
@@ -50,7 +50,7 @@ public class User{
 
 
     public Document toMongoDoc(){
-        Document doc = new Document(  );
+        Document doc = new Document();
         doc.put( MONGO_NAME_KEY, name );
         doc.put( MONGO_TAGS_KEY, tagsVector );
         return doc;
@@ -58,7 +58,7 @@ public class User{
 
 
     public static User fromMongoDoc( Document doc ){
-        if(!doc.containsKey( MONGO_NAME_KEY )) return null;
+        if( !doc.containsKey( MONGO_NAME_KEY ) ) return null;
         User user = new User();
         user.setName( doc.getString( MONGO_NAME_KEY ) );
         if( doc.containsKey( MONGO_TAGS_KEY ) ){
@@ -71,13 +71,4 @@ public class User{
         return user;
     }
 
-
-
-    // ----------------------------------------------------
-
-    public static void main( String[] args ){
-
-        MongoUtils.getCollection( "user" );
-
-    }//end main
 }//end class

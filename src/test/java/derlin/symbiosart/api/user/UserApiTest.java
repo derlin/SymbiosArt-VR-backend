@@ -1,7 +1,7 @@
 package derlin.symbiosart.api.user;
 
-import derlin.symbiosart.pojo.TagsVector;
-import derlin.symbiosart.pojo.User;
+import derlin.symbiosart.api.commons.Constants;
+import derlin.symbiosart.api.commons.TagsVector;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,7 +16,7 @@ public class UserApiTest{
 
     private static final String ID = "junit", ID2 = "test";
     User user = new User();
-    UserApi api = new UserApi();
+    UsersApi api = new UsersApi( Constants.MONGO_COLL_CREATOR.apply( "users_test" ) );
 
     @Before
     public void setup(){

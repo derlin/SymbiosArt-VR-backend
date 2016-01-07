@@ -1,4 +1,4 @@
-package derlin.symbiosart.pojo;
+package derlin.symbiosart.api.commons;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,7 +18,7 @@ public class TagsVector extends TreeMap<String, Integer>{
     }
 
 
-    public TagsVector( Map<String,Integer> m ){
+    public TagsVector( Map<String, Integer> m ){
         super( m );
     }
 

@@ -2,8 +2,7 @@ package derlin.symbiosart.api.user;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import derlin.symbiosart.pojo.User;
-import derlin.symbiosart.utils.MongoUtils;
+import derlin.symbiosart.api.commons.Interfaces;
 import org.bson.Document;
 
 import java.util.List;
@@ -13,17 +12,21 @@ import java.util.stream.StreamSupport;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
-import static derlin.symbiosart.pojo.User.MONGO_NAME_KEY;
+import static derlin.symbiosart.api.user.User.MONGO_NAME_KEY;
 
 /**
  * @author: Lucy Linder
  * @date: 04.01.2016
  */
-public class UserApi{
+public class UsersApi implements Interfaces.IUsersApi{
 
-    public static final String MONGO_COLL = "users";
+    MongoCollection<Document> coll;
 
-    MongoCollection<Document> coll = MongoUtils.getCollection( MONGO_COLL );
+
+    public UsersApi( MongoCollection<Document> coll ){
+        this.coll = coll;
+    }
+
 
     public List<String> getUsers(){
 
@@ -40,6 +43,7 @@ public class UserApi{
 
     public User getUser( String id ){
         Document doc = coll.find( eq( MONGO_NAME_KEY, id ) ).first();
+        if(doc == null) return null;
         return User.fromMongoDoc( doc );
     }
 
@@ -68,17 +72,5 @@ public class UserApi{
     public void removeUser( String id ){
         coll.deleteOne( eq( MONGO_NAME_KEY, id ) );
     }
-
-
-    /* *****************************************************************
-     *
-     * ****************************************************************/
-    public static void main( String[] args ){
-        UserApi api = new UserApi();
-        User test = api.getUser( "test" );
-        test.getTagsVector().put( "moon", -5 );
-        api.updateUser( "test", test );
-    }//end main
-
 
 }//end class
