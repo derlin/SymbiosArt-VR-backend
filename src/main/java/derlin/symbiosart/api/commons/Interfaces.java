@@ -31,7 +31,7 @@ public class Interfaces{
     // ----------------------------------------------------
 
     public interface IUsersApi{
-        List<String> getUsers();
+        List<Document> getUsers();
 
         User getUser( String id );
 

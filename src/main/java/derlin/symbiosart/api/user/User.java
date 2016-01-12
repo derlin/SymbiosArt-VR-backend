@@ -16,14 +16,27 @@ import java.util.Map;
 @XmlRootElement
 public class User implements Interfaces.IMongoInsertable{
 
-    public static final String MONGO_NAME_KEY = "_id";
+    public static final String MONGO_NAME_KEY = "name";
     public static final String MONGO_TAGS_KEY = "tags_vector";
 
-    private String name;
+    private String id, name;
 
     private TagsVector tagsVector;
 
     private List<String> likedIds, dislikedIds;
+
+
+    @JsonProperty( "_id" )
+    public String getId(){
+        return id;
+    }
+
+
+    @JsonProperty( "_id" )
+    public void setId( String id ){
+        this.id = id;
+    }
+
 
     @JsonProperty( "name" )
     public String getName(){
@@ -77,8 +90,11 @@ public class User implements Interfaces.IMongoInsertable{
 
     public Document toMongoDoc(){
         Document doc = new Document();
+
         doc.put( MONGO_NAME_KEY, name );
         doc.put( MONGO_TAGS_KEY, tagsVector );
+
+        if(id != null) doc.put( "_id", id );
         if(likedIds != null) doc.put( "liked_ids", likedIds );
         if(dislikedIds != null) doc.put( "disliked_ids", dislikedIds );
 
@@ -87,9 +103,11 @@ public class User implements Interfaces.IMongoInsertable{
 
 
     public static User fromMongoDoc( Document doc ){
-        if( !doc.containsKey( MONGO_NAME_KEY ) ) return null;
+        if( !doc.containsKey( "_id" ) || !doc.containsKey( MONGO_NAME_KEY ) ) return null;
         User user = new User();
+        user.setId( doc.getString( "_id" ) );
         user.setName( doc.getString( MONGO_NAME_KEY ) );
+
         if( doc.containsKey( MONGO_TAGS_KEY ) ){
             try{
                 user.tagsVector = new TagsVector( ( Map<String, Integer> ) doc.get( MONGO_TAGS_KEY ) );

@@ -8,6 +8,7 @@ package derlin.symbiosart.jetty.rest;
 import derlin.symbiosart.api.ApiProvider;
 import derlin.symbiosart.api.commons.Interfaces;
 import derlin.symbiosart.api.user.User;
+import org.bson.Document;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -23,7 +24,8 @@ public class UsersService{
     @GET
     @Path( "/all" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public List<String> getNameList(){
+//    public Map<String,String> getNameList(){
+    public List<Document> getNameList(){
         return api.getUsers();
     }
 
@@ -33,29 +35,49 @@ public class UsersService{
     @Path( "/{id}" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     public User getUser( @PathParam( "id" ) String id ){
+        System.out.println("getting id " + id);
         return api.getUser( id );
+    }
+
+
+    // either add or update
+    @POST
+    @Path( "/" )
+    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    public String addUpdateUser( User user ){
+        if( user.getId() == null ){
+            System.out.println("adding user " + user);
+            api.addUser( user );
+        }else{
+            System.out.println("updating user " + user);
+            api.updateUser( user.getId(), user );
+        }
+        return user.getId();
     }
 
 
     // curl -X POST -H 'Content-Type:application/json' --data '{"name":"test","tags_vector":{"newyork":3,"sea":-1} }'
     // http://localhost:8680/rest/user
     @POST
-    @Path( "/" )
+    @Path( "/add" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public boolean addUser( User user ){
+    public String addUser( User user ){
+        assert user.getId() == null;
         api.addUser( user );
-        return true;
+        return user.getId();
     }
 
+
     // curl -X POST -H 'Content-Type:application/json' --data '{"name":"test", "tags_vector":{"wedding": 2}}'
-    // http://localhost:8680/rest/user/test
+    // http://localhost:8680/rest/user/
     @POST
-    @Path( "/{id}" )
+    @Path( "/update" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public boolean updateUser( @PathParam( "id" ) String id, User user ){
-        return api.updateUser( id, user );
+    public boolean updateUser( User user ){
+        return user.getId() != null && api.updateUser( user.getId(), user );
     }
 
 
