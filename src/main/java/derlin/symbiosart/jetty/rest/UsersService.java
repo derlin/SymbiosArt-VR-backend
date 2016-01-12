@@ -43,8 +43,9 @@ public class UsersService{
     @Path( "/" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public void addUser( User user ){
+    public boolean addUser( User user ){
         api.addUser( user );
+        return true;
     }
 
     // curl -X POST -H 'Content-Type:application/json' --data '{"name":"test", "tags_vector":{"wedding": 2}}'

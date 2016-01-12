@@ -33,7 +33,7 @@ public class Constants{
     // solr
     public final static String SOLR_HOST = "localhost"; //"dulcolax.local";
     public final static int SOLR_PORT = 8983;
-    public static final String[] SOLR_INDEXED_FIELDS = new String[]{ ID_KEY, IMG_TAGS_KEY, URL_KEY };
+    public static final String[] SOLR_INDEXED_FIELDS = new String[]{ ID_KEY, IMG_TAGS_KEY, URL_KEY, "originalFormat" };
     public static final String SOLR_DEFAULT_CORE = "symbiosart";
 
     public static final Function<String, SolrClient> SOLR_CLIENT_CREATOR = ( core ) -> //

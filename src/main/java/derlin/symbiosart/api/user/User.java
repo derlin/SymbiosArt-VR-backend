@@ -6,6 +6,7 @@ import derlin.symbiosart.api.commons.TagsVector;
 import org.bson.Document;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +23,7 @@ public class User implements Interfaces.IMongoInsertable{
 
     private TagsVector tagsVector;
 
+    private List<String> likedIds, dislikedIds;
 
     @JsonProperty( "name" )
     public String getName(){
@@ -46,6 +48,30 @@ public class User implements Interfaces.IMongoInsertable{
         this.tagsVector = tagsVector;
     }
 
+
+    @JsonProperty( "liked_ids" )
+    public List<String> getLikedIds(){
+        return likedIds;
+    }
+
+
+    @JsonProperty( "liked_ids" )
+    public void setLikedIds( List<String> likedIds ){
+        this.likedIds = likedIds;
+    }
+
+
+    @JsonProperty( "disliked_ids" )
+    public List<String> getDislikedIds(){
+        return dislikedIds;
+    }
+
+
+    @JsonProperty( "disliked_ids" )
+    public void setDislikedIds( List<String> dislikedIds ){
+        this.dislikedIds = dislikedIds;
+    }
+
     // ----------------------------------------------------
 
 
@@ -53,6 +79,9 @@ public class User implements Interfaces.IMongoInsertable{
         Document doc = new Document();
         doc.put( MONGO_NAME_KEY, name );
         doc.put( MONGO_TAGS_KEY, tagsVector );
+        if(likedIds != null) doc.put( "liked_ids", likedIds );
+        if(dislikedIds != null) doc.put( "disliked_ids", dislikedIds );
+
         return doc;
     }
 
@@ -68,6 +97,9 @@ public class User implements Interfaces.IMongoInsertable{
                 e.printStackTrace();
             }
         }
+
+        if(doc.containsKey( "liked_ids" )) user.setLikedIds( (List<String>) doc.get( "liked_ids" ) );
+        if(doc.containsKey( "disliked_ids" )) user.setDislikedIds( (List<String>) doc.get( "disliked_ids" ) );
         return user;
     }
 
