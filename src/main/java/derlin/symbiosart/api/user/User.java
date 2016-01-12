@@ -9,9 +9,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- * @author: Lucy Linder
- * @date: 04.01.2016
+ * This class represents a user. It supports conversion
+ * from/to mongo documents and xml/json serialization.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 @XmlRootElement
 public class User implements Interfaces.IMongoInsertable{
@@ -94,9 +101,9 @@ public class User implements Interfaces.IMongoInsertable{
         doc.put( MONGO_NAME_KEY, name );
         doc.put( MONGO_TAGS_KEY, tagsVector );
 
-        if(id != null) doc.put( "_id", id );
-        if(likedIds != null) doc.put( "liked_ids", likedIds );
-        if(dislikedIds != null) doc.put( "disliked_ids", dislikedIds );
+        if( id != null ) doc.put( "_id", id );
+        if( likedIds != null ) doc.put( "liked_ids", likedIds );
+        if( dislikedIds != null ) doc.put( "disliked_ids", dislikedIds );
 
         return doc;
     }
@@ -116,8 +123,8 @@ public class User implements Interfaces.IMongoInsertable{
             }
         }
 
-        if(doc.containsKey( "liked_ids" )) user.setLikedIds( (List<String>) doc.get( "liked_ids" ) );
-        if(doc.containsKey( "disliked_ids" )) user.setDislikedIds( (List<String>) doc.get( "disliked_ids" ) );
+        if( doc.containsKey( "liked_ids" ) ) user.setLikedIds( ( List<String> ) doc.get( "liked_ids" ) );
+        if( doc.containsKey( "disliked_ids" ) ) user.setDislikedIds( ( List<String> ) doc.get( "disliked_ids" ) );
         return user;
     }
 

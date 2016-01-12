@@ -3,10 +3,7 @@ package derlin.symbiosart.api.user;
 import derlin.symbiosart.api.commons.Constants;
 import derlin.symbiosart.api.commons.TagsVector;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
-
-import java.util.List;
 
 /**
  * @author: Lucy Linder
@@ -33,7 +30,7 @@ public class UserApiTest{
         api.removeUser( ID2 );
     }
 
-
+    /*
     @org.junit.Test
     public void testAll(){
         // add
@@ -62,7 +59,7 @@ public class UserApiTest{
         api.removeUser( ID2 );
         users = api.getUsers();
         Assert.assertFalse( users.contains( ID2 ) );
-    }
+    }     */
 
 
 }//end class

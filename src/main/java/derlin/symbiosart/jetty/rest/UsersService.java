@@ -1,10 +1,5 @@
 package derlin.symbiosart.jetty.rest;
 
-/**
- * @author: Lucy Linder
- * @date: 26.12.2015
- */
-
 import derlin.symbiosart.api.ApiProvider;
 import derlin.symbiosart.api.commons.Interfaces;
 import derlin.symbiosart.api.user.User;
@@ -14,6 +9,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * The REST front-end for the images API.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
+ */
 @Path( "/user" )
 public class UsersService{
 

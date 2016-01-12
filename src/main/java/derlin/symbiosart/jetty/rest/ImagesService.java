@@ -1,18 +1,23 @@
 package derlin.symbiosart.jetty.rest;
 
-/**
- * @author: Lucy Linder
- * @date: 26.12.2015
- */
-
 import derlin.symbiosart.api.ApiProvider;
 import derlin.symbiosart.api.commons.Interfaces;
 import derlin.symbiosart.api.commons.TagsVector;
+import org.bson.Document;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * The REST front-end for the images API.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
+ */
 @Path( "/images" )
 public class ImagesService{
 
@@ -25,7 +30,7 @@ public class ImagesService{
     @Path( "/suggestions/{nbr}" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public List<org.bson.Document> get( TagsVector tagsVector, @PathParam( "nbr" ) int nbr ){
+    public List<Document> get( TagsVector tagsVector, @PathParam( "nbr" ) int nbr ){
         return api.getSuggestions( tagsVector, nbr );
     }
 

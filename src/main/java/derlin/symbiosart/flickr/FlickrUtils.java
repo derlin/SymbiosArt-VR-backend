@@ -12,8 +12,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author: Lucy Linder
- * @date: 05.01.2016
+ * This classes provides static wrappers to query
+ * the flickr api.photo.search end point.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 public class FlickrUtils{
 

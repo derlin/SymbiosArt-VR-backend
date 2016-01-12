@@ -8,8 +8,16 @@ import derlin.symbiosart.api.img.ImagesApi;
 import derlin.symbiosart.api.user.UsersApi;
 
 /**
- * @author: Lucy Linder
- * @date: 06.01.2016
+ * This class is an IApiProvider configured to use
+ * the server informations defined in {@link Constants}.
+ * It provides instances apis of classes {@link ImagesApi} and
+ * {@link UsersApi}.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 public class ApiProvider implements Interfaces.IApiProvider{
 
@@ -25,7 +33,10 @@ public class ApiProvider implements Interfaces.IApiProvider{
         mongoDb = new MongoClient( Constants.MONGO_HOST ).getDatabase( Constants.MONGO_DB );
     }
 
-    // ----------------------------------------------------
+
+    /* *****************************************************************
+     * getters and setters, just in case
+     * ****************************************************************/
 
 
     public void setMongoImagesColl( String mongoImagesColl ){
@@ -42,7 +53,10 @@ public class ApiProvider implements Interfaces.IApiProvider{
         this.solrCore = solrCore;
     }
 
-    // ----------------------------------------------------
+
+    /* *****************************************************************
+     * implement interface
+     * ****************************************************************/
 
 
     @Override
@@ -55,7 +69,7 @@ public class ApiProvider implements Interfaces.IApiProvider{
 
     @Override
     public Interfaces.IUsersApi getUsersApi(){
-        return new UsersApi(mongoDb.getCollection( mongoUsersColl ));
+        return new UsersApi( mongoDb.getCollection( mongoUsersColl ) );
     }
 
 }

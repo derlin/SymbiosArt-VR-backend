@@ -15,8 +15,28 @@ import java.util.stream.Stream;
 import static derlin.symbiosart.api.commons.Constants.*;
 
 /**
- * @author: Lucy Linder
- * @date: 20.12.2015
+ * This class provides a simple command-line utility to
+ * index/insert documents into the mongo and solr servers
+ * provided by {@link derlin.symbiosart.api.ApiProvider}.
+ * <p>
+ * Usage: <br />
+ * <pre>
+ *     java BatchInserter <path to json file> <mongo collection> <solr core>
+ * </pre>
+ * <p>
+ * Arguments:
+ * <ol>
+ * <li>path: mandatory, the path to a valid json file, one document per line</li>
+ * <li>mongo: the name of the mongo collection to use. Will be created
+ * if needed. Provide an empty string ("") if you want only solr indexing</li>
+ * <li>solr: the name of the core. Provide an empty string ("") if you want only mongo insertion.</li>
+ * </ol>
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 public class BatchInserter{
 
@@ -169,7 +189,9 @@ public class BatchInserter{
     }
 
 
-    // ----------------------------------------------------
+    /* *****************************************************************
+     * main method
+     * ****************************************************************/
 
 
     public static void main( String[] args ){
@@ -186,15 +208,15 @@ public class BatchInserter{
         BatchInserter inserter = new BatchInserter( mongoColl, solrCore );
         long sum;
 
-        if(mongoColl.isEmpty()){
+        if( mongoColl.isEmpty() ){
             sum = inserter.indexAll( path );
-            System.out.println("indexing...");
-        }else if(solrCore.isEmpty()){
+            System.out.println( "indexing..." );
+        }else if( solrCore.isEmpty() ){
             sum = inserter.insertAll( path );
-            System.out.println("inserting...");
+            System.out.println( "inserting..." );
 
         }else{
-            System.out.println("inserting and indexing...");
+            System.out.println( "inserting and indexing..." );
             sum = inserter.insertIndexAll( path );
         }
 

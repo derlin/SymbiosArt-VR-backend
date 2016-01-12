@@ -10,19 +10,27 @@ import org.bson.Document;
 import java.util.function.Function;
 
 /**
- * @author: Lucy Linder
- * @date: 06.01.2016
+ * This class gathers all the configuration constants
+ * used throughout the application (server hosts,
+ * indexed fields, etc) allowing a simple/quick
+ * customization.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 06.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 public class Constants{
 
-    // common keys
+    // common strings
     public static final String ID_KEY = "_id";
     public static final String IMG_TAGS_KEY = "tags";
     public static final String URL_KEY = "url";
 
     // mongo
     public static final String MONGO_HOST = "localhost";
-    public final static String MONGO_DB = "symbiosart"; // mydb
+    public final static String MONGO_DB = "symbiosart";
     public final static Function<String, MongoCollection<Document>> MONGO_COLL_CREATOR = ( coll ) -> //
             new MongoClient( Constants.MONGO_HOST ).getDatabase( Constants.MONGO_DB ).getCollection( coll );
 
@@ -35,6 +43,7 @@ public class Constants{
     public final static int SOLR_PORT = 8983;
     public static final String[] SOLR_INDEXED_FIELDS = new String[]{ ID_KEY, IMG_TAGS_KEY, URL_KEY, "originalFormat" };
     public static final String SOLR_DEFAULT_CORE = "symbiosart";
+    public static final int MAX_TAGS_IN_SOLR_QUERY = 10;
 
     public static final Function<String, SolrClient> SOLR_CLIENT_CREATOR = ( core ) -> //
             new HttpSolrClient( String.format( "http://%s:%d/solr/%s", SOLR_HOST, SOLR_PORT, core ) );
@@ -44,6 +53,7 @@ public class Constants{
         r.forEach( e -> doc.put( e.getKey(), e.getValue() ) );
         return doc;
     };
+
 
     // rest server
     public static final int SERVER_PORT = 8680;

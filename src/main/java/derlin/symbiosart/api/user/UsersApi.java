@@ -17,22 +17,28 @@ import static derlin.symbiosart.api.commons.Constants.ID_KEY;
 import static derlin.symbiosart.api.user.User.MONGO_NAME_KEY;
 
 /**
- * @author: Lucy Linder
- * @date: 04.01.2016
+ * This class implements the CRUD operations of the
+ * IUserApi. It manipulates only {@link User} objects.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 public class UsersApi implements Interfaces.IUsersApi{
 
-    MongoCollection<Document> coll;
+    MongoCollection<Document> mongoCollection;
 
 
-    public UsersApi( MongoCollection<Document> coll ){
-        this.coll = coll;
+    public UsersApi( MongoCollection<Document> mongoCollection ){
+        this.mongoCollection = mongoCollection;
     }
 
 
     public List<Document> getUsers(){
 
-        FindIterable<Document> iterable = coll.find() //
+        FindIterable<Document> iterable = mongoCollection.find() //
                 .projection( fields( include( ID_KEY, MONGO_NAME_KEY ) ) );
 
         return StreamSupport.stream( iterable.spliterator(), false )   //
@@ -42,7 +48,7 @@ public class UsersApi implements Interfaces.IUsersApi{
 
 
     public User getUser( String id ){
-        Document doc = coll.find( eq( ID_KEY, id ) ).first();
+        Document doc = mongoCollection.find( eq( ID_KEY, id ) ).first();
         if( doc == null ) return null;
         return User.fromMongoDoc( doc );
     }
@@ -51,7 +57,7 @@ public class UsersApi implements Interfaces.IUsersApi{
     public void addUser( User user ){
         assert user.getId() == null;
         user.setId( new ObjectId().toString() );
-        coll.insertOne( user.toMongoDoc() );
+        mongoCollection.insertOne( user.toMongoDoc() );
     }
 
 
@@ -64,14 +70,14 @@ public class UsersApi implements Interfaces.IUsersApi{
         }else{
             // update
             Document doc = user.toMongoDoc();
-            coll.replaceOne( eq( ID_KEY, user.getId() ), doc );
+            mongoCollection.replaceOne( eq( ID_KEY, user.getId() ), doc );
             return true;
         }
     }
 
 
     public void removeUser( String id ){
-        coll.deleteOne( eq( ID_KEY, id ) );
+        mongoCollection.deleteOne( eq( ID_KEY, id ) );
     }
 
 

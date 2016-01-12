@@ -8,8 +8,14 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
- * @author: Lucy Linder
- * @date: 27.12.2015
+ * A simple map tagname/wheight, supporting
+ * json and xml serialization.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 27.12.2015
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 @XmlRootElement
 public class TagsVector extends TreeMap<String, Integer>{
@@ -22,6 +28,10 @@ public class TagsVector extends TreeMap<String, Integer>{
         super( m );
     }
 
+    /* *****************************************************************
+     * only for xml serialization
+     * ****************************************************************/
+
 
     @XmlElement( name = "tag" )
     public List<Tag> getForXmlSerialization(){
@@ -31,9 +41,6 @@ public class TagsVector extends TreeMap<String, Integer>{
     }
 
 
-    /* *****************************************************************
-     * one tag (mainly for xml serialization)
-     * ****************************************************************/
     public static class Tag{
         private String value;
         private int weight;

@@ -7,29 +7,46 @@ import org.bson.Document;
 import java.util.List;
 
 /**
+ * This class defines the interfaces of/sed by the two
+ * main APIs (image and user).
+ * <p>
+ * This is important in order to decouple the API
+ * providers and the jetty server/rest services.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 05.01.2016
+ * ---------------------------------------------------
+ *
  * @author: Lucy Linder
- * @date: 05.01.2016
  */
 public class Interfaces{
 
-    @FunctionalInterface
-    public interface IMongoInsertable{
-        Document toMongoDoc();
-    }
-
-    @FunctionalInterface
-    public interface ISolrIndexable{
-        SolrInputDocument toSolrInputDoc();
-    }
 
     // ----------------------------------------------------
 
+    /**
+     * Api provider, used by the rest service.
+     * Its role is to instantiate the two apis
+     * with the corect connection strings
+     */
+    public interface IApiProvider{
+        IIMagesApi getImagesApi();
+
+        IUsersApi getUsersApi();
+    }
+
+    /**
+     * The image api, able to suggest
+     * image metas based on a tag vector.
+     */
     public interface IIMagesApi{
         List<Document> getSuggestions( TagsVector tagsVector, int nbr );
     }
 
-    // ----------------------------------------------------
-
+    /**
+     * The user api, implementing
+     * the CRUD operations.
+     */
     public interface IUsersApi{
         List<Document> getUsers();
 
@@ -42,11 +59,19 @@ public class Interfaces{
         void removeUser( String id );
     }
 
-    // ----------------------------------------------------
 
-    public interface IApiProvider{
-        IIMagesApi getImagesApi();
+    // ---------------------------------------------------
 
-        IUsersApi getUsersApi();
+    /**
+     * Useful for tests and batch utils.
+     */
+    @FunctionalInterface
+    public interface IMongoInsertable{
+        Document toMongoDoc();
+    }
+
+    @FunctionalInterface
+    public interface ISolrIndexable{
+        SolrInputDocument toSolrInputDoc();
     }
 }//end class

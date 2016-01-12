@@ -13,14 +13,29 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 /**
- * @author: Lucy Linder
- * @date: 05.01.2016
+ * This class provide a simple command-line utility to
+ * download metas and images from flickr, given an initial set of tags.
+ * <p>
+ * The images are sorted on interestingness, desc.
+ * <p>
+ * Usage: <br />
+ * <pre>
+ *     java BatchDownloader <target dir> "tag[, tags]" [nbr]
+ * </pre>
+ * <p>
+ * The script creates a folder "tagname". Then,
+ * images are stored as id.ext, while metas are
+ * serialized in json in id.json.
+ * ---------------------------------------------------
+ * Context: Projet de Bachelor - SymbiosArt Immersion
+ * date 01.01.2016
+ * ---------------------------------------------------
+ *
+ * @author Lucy Linder
  */
 public class BatchDownloader{
 
     private static final int DEFAULT_RESULTS = 100;
-    private File imgDir, metaDir;
-
 
     public static void main( String[] args ){
         if( args.length < 2 ) exitErr( "usage: targetDir tag[,tag]" );
@@ -38,6 +53,10 @@ public class BatchDownloader{
         go( dir, tags, results );
 
     }//end main
+
+    // ----------------------------------------------------
+
+    private File imgDir, metaDir;
 
 
     public static void go( File dir, String[] tags, int results ){
