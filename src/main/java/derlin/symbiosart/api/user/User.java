@@ -128,4 +128,9 @@ public class User implements Interfaces.IMongoInsertable{
         return user;
     }
 
+
+    @Override
+    public String toString(){
+        return String.format( "[%s] %s (tv:%d)", id, name, tagsVector.size() );
+    }
 }//end class

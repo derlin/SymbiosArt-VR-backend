@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import derlin.symbiosart.api.commons.Interfaces;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ import static derlin.symbiosart.api.user.User.MONGO_NAME_KEY;
  */
 public class UsersApi implements Interfaces.IUsersApi{
 
+    private static Logger log = org.slf4j.LoggerFactory.getLogger( UsersApi.class );
+
     MongoCollection<Document> mongoCollection;
 
 
@@ -49,7 +52,10 @@ public class UsersApi implements Interfaces.IUsersApi{
 
     public User getUser( String id ){
         Document doc = mongoCollection.find( eq( ID_KEY, id ) ).first();
-        if( doc == null ) return null;
+        if( doc == null ){
+            log.warn( "error finding user with id '%s'", id );
+            return null;
+        }
         return User.fromMongoDoc( doc );
     }
 
@@ -58,6 +64,7 @@ public class UsersApi implements Interfaces.IUsersApi{
         assert user.getId() == null;
         user.setId( new ObjectId().toString() );
         mongoCollection.insertOne( user.toMongoDoc() );
+        log.info( "%s added", user.getId() );
     }
 
 
@@ -65,12 +72,14 @@ public class UsersApi implements Interfaces.IUsersApi{
 
         if( !user.getId().equals( id ) ){
             // id changed, error
+            log.warn( "error: id mismatch '%s' '%s'", id, user );
             return false;
 
         }else{
             // update
             Document doc = user.toMongoDoc();
             mongoCollection.replaceOne( eq( ID_KEY, user.getId() ), doc );
+            log.info( "%s updated", id );
             return true;
         }
     }

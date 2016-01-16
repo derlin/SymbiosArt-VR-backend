@@ -9,6 +9,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.bson.Document;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
  * @date: 06.01.2016
  */
 public class ImagesApi implements Interfaces.IIMagesApi{
+
+    private static Logger log = org.slf4j.LoggerFactory.getLogger( ImagesApi.class );
 
     private SolrClient solrClient;
     private String fl = String.join( ",", Constants.SOLR_INDEXED_FIELDS );
@@ -44,6 +47,8 @@ public class ImagesApi implements Interfaces.IIMagesApi{
             query.set( "rows", nbr );
             query.set( "defType", "edismax" );
 
+            log.debug( "---------------" );
+
             String q;
             if( tagsVector.isEmpty() ){
                 q = "*:*";
@@ -60,18 +65,20 @@ public class ImagesApi implements Interfaces.IIMagesApi{
 
             query.set( "q", q );
 
-            System.out.println( query.toString() );
+            log.debug( "solr query: " + query.toString() );
 
             QueryResponse response = solrClient.query( query );
 
             List<Document> list = response.getResults().stream() //
                     .map( Constants.SOLR_TO_DOC_CONVERTOR::apply ).collect( Collectors.toList() );
 
-            System.out.println("returned " + list.size() + " documents.");
+            log.info( "returned " + list.size() + " documents." );
+            log.debug( "---------------" );
             return list;
 
         }catch( SolrServerException | IOException e ){
             e.printStackTrace();
+            log.error( e.toString() );
         }
 
         return new ArrayList<>();
@@ -94,6 +101,8 @@ public class ImagesApi implements Interfaces.IIMagesApi{
                 .limit( Constants.MAX_TAGS_IN_SOLR_QUERY ) //
                 .forEach( e -> tv.put( e.getKey(), e.getValue().compareTo( 0 ) ) );
 
+        log.debug( "original tv: " + original.toPrettyString() );
+        log.debug( "filtered tv: " + tv.toPrettyString() );
         return tv;
     }
     //"(tags:aguila)^1  (tags:aigle)^-4  (tags:angle)^1  (tags:anglesanglesangles)^1  (tags:animal)^0

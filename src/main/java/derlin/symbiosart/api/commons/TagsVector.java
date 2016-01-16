@@ -28,6 +28,13 @@ public class TagsVector extends TreeMap<String, Integer>{
         super( m );
     }
 
+
+    public String toPrettyString(){
+        return entrySet().stream()  //
+                .map( e -> String.format( "%s=%s", e.getKey(), e.getValue() ) ) //
+                .collect( Collectors.joining( ", " ) );
+    }
+
     /* *****************************************************************
      * only for xml serialization
      * ****************************************************************/
