@@ -4,6 +4,8 @@ import com.mongodb.client.MongoCollection;
 import derlin.symbiosart.api.commons.Constants;
 import derlin.symbiosart.api.commons.Interfaces;
 import derlin.symbiosart.api.commons.TagsVector;
+import derlin.symbiosart.api.commons.exceptions.NotFoundException;
+import derlin.symbiosart.api.commons.exceptions.UnexpectedError;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -12,7 +14,6 @@ import org.bson.Document;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -38,17 +39,18 @@ public class ImagesApi implements Interfaces.IIMagesApi{
 
 
     @Override
-    public Document getDetails( String id ){
+    public Document getDetails( String id ) throws NotFoundException{
         Document doc = mongoClient.find( new Document( Constants.ID_KEY, id ) ).first();
         if( doc == null ){
             log.error( String.format( "Request for document %s failed: no such document", id ) );
+            throw new NotFoundException( id );
         }
         return doc;
     }
 
 
     @Override
-    public List<Document> getSuggestions( TagsVector tagsVector, int nbr ){
+    public List<Document> getSuggestions( TagsVector tagsVector, int nbr ) throws UnexpectedError{
 
         SolrQuery query = new SolrQuery();
 
@@ -91,9 +93,8 @@ public class ImagesApi implements Interfaces.IIMagesApi{
         }catch( SolrServerException | IOException e ){
             e.printStackTrace();
             log.error( e.toString() );
+            throw new UnexpectedError( e );
         }
-
-        return new ArrayList<>();
     }
 
 

@@ -40,6 +40,10 @@
             <param-name>pathInfoOnly</param-name>
             <param-value>true</param-value>
         </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>derlin.symbiosart.jetty.exceptions</param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>

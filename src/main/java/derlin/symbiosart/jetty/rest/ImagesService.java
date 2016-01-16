@@ -3,6 +3,7 @@ package derlin.symbiosart.jetty.rest;
 import derlin.symbiosart.api.ApiProvider;
 import derlin.symbiosart.api.commons.Interfaces;
 import derlin.symbiosart.api.commons.TagsVector;
+import derlin.symbiosart.api.commons.exceptions.SymbiosArtException;
 import org.bson.Document;
 
 import javax.ws.rs.*;
@@ -30,8 +31,11 @@ public class ImagesService{
     @Path( "/suggestions/{nbr}" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public List<Document> getSuggestions( TagsVector tagsVector, @PathParam( "nbr" ) int nbr ){
+    public List<Document> getSuggestions( TagsVector tagsVector,
+                                          @PathParam( "nbr" ) int nbr ) throws SymbiosArtException{
+
         return api.getSuggestions( tagsVector, nbr );
+
     }
 
 
@@ -39,8 +43,7 @@ public class ImagesService{
     @GET
     @Path( "/{id}" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public Document getDetails( @PathParam( "id" ) String id){
-        Document doc = api.getDetails( id );
-        return doc;
+    public Document getDetails( @PathParam( "id" ) String id ) throws SymbiosArtException{
+        return api.getDetails( id );
     }
 }//end class

@@ -3,6 +3,7 @@ package derlin.symbiosart.api.user;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import derlin.symbiosart.api.commons.Interfaces;
+import derlin.symbiosart.api.commons.exceptions.NotFoundException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -50,11 +51,11 @@ public class UsersApi implements Interfaces.IUsersApi{
     }
 
 
-    public User getUser( String id ){
+    public User getUser( String id ) throws NotFoundException{
         Document doc = mongoCollection.find( eq( ID_KEY, id ) ).first();
         if( doc == null ){
             log.warn( "error finding user with id '%s'", id );
-            return null;
+            throw new NotFoundException( id );
         }
         return User.fromMongoDoc( doc );
     }

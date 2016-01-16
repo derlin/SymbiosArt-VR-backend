@@ -2,6 +2,7 @@ package derlin.symbiosart.jetty.rest;
 
 import derlin.symbiosart.api.ApiProvider;
 import derlin.symbiosart.api.commons.Interfaces;
+import derlin.symbiosart.api.commons.exceptions.SymbiosArtException;
 import derlin.symbiosart.api.user.User;
 import org.bson.Document;
 
@@ -28,7 +29,7 @@ public class UsersService{
     @GET
     @Path( "/all" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-//    public Map<String,String> getNameList(){
+    //    public Map<String,String> getNameList(){
     public List<Document> getNameList(){
         return api.getUsers();
     }
@@ -38,8 +39,7 @@ public class UsersService{
     @GET
     @Path( "/{id}" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public User getUser( @PathParam( "id" ) String id ){
-        System.out.println("getting id " + id);
+    public User getUser( @PathParam( "id" ) String id ) throws SymbiosArtException{
         return api.getUser( id );
     }
 
@@ -51,10 +51,10 @@ public class UsersService{
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     public String addUpdateUser( User user ){
         if( user.getId() == null ){
-            System.out.println("adding user " + user);
+            System.out.println( "adding user " + user );
             api.addUser( user );
         }else{
-            System.out.println("updating user " + user);
+            System.out.println( "updating user " + user );
             api.updateUser( user.getId(), user );
         }
         return user.getId();
