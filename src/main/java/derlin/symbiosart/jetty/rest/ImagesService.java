@@ -30,20 +30,17 @@ public class ImagesService{
     @Path( "/suggestions/{nbr}" )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public List<Document> get( TagsVector tagsVector, @PathParam( "nbr" ) int nbr ){
+    public List<Document> getSuggestions( TagsVector tagsVector, @PathParam( "nbr" ) int nbr ){
         return api.getSuggestions( tagsVector, nbr );
     }
 
 
     // curl -v -X POST -H 'Accept:application/xml' http://localhost:8680/rest/images/example/tagsvector
-    @POST
-    @Path( "/example/tagsvector" )
+    @GET
+    @Path( "/{id}" )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public TagsVector gelt(){
-        TagsVector vector = new TagsVector();
-        vector.put( "newyork", 3 );
-        vector.put( "wedding", 4 );
-        vector.put( "sea", -1 );
-        return vector;
+    public Document getDetails( @PathParam( "id" ) String id){
+        Document doc = api.getDetails( id );
+        return doc;
     }
 }//end class

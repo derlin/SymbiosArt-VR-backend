@@ -41,6 +41,8 @@ public class Interfaces{
      */
     public interface IIMagesApi{
         List<Document> getSuggestions( TagsVector tagsVector, int nbr );
+
+        Document getDetails(String id);
     }
 
     /**

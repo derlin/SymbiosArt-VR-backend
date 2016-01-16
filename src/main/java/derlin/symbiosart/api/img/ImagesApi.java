@@ -26,12 +26,24 @@ public class ImagesApi implements Interfaces.IIMagesApi{
     private static Logger log = org.slf4j.LoggerFactory.getLogger( ImagesApi.class );
 
     private SolrClient solrClient;
+    private MongoCollection<Document> mongoClient;
     private String fl = String.join( ",", Constants.SOLR_INDEXED_FIELDS );
     private Random rand = new Random();
 
 
     public ImagesApi( SolrClient solrClient, MongoCollection<Document> mongoClient ){
         this.solrClient = solrClient;
+        this.mongoClient = mongoClient;
+    }
+
+
+    @Override
+    public Document getDetails( String id ){
+        Document doc = mongoClient.find( new Document( Constants.ID_KEY, id ) ).first();
+        if( doc == null ){
+            log.error( String.format( "Request for document %s failed: no such document", id ) );
+        }
+        return doc;
     }
 
 
@@ -83,6 +95,7 @@ public class ImagesApi implements Interfaces.IIMagesApi{
 
         return new ArrayList<>();
     }
+
 
     /* *****************************************************************
      * private utils
