@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LOGBACK Configuration File
+  Used during development (maven build - intellij)
+http://logback.qos.ch/manual/configuration.html
+
+  -->
+<configuration>
+    <!--not used-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%logger{36}] => %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--used : will also be printed on intellij console during development -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/tmp/jetty.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>jetty_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%logger{36}] => %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--jetty logs-->
+    <logger name="org.eclipse.jetty" level="INFO">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!--custom aplication logs-->
+    <logger name="derlin.symbiosart" level="DEBUG">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!--default-->
+    <root level="error">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
