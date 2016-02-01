@@ -157,6 +157,13 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!--wordnet-->
+        <dependency>
+            <groupId>edu.mit</groupId>
+            <artifactId>jwi</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
     </dependencies>
 
 

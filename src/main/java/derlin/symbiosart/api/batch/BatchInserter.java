@@ -2,6 +2,7 @@ package derlin.symbiosart.api.batch;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import derlin.symbiosart.api.commons.WordNetFilter;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
@@ -10,9 +11,12 @@ import org.bson.Document;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
-import static derlin.symbiosart.api.commons.Constants.*;
+import static derlin.symbiosart.Constants.*;
 
 /**
  * This class provides a simple command-line utility to
@@ -42,6 +46,7 @@ public class BatchInserter{
 
     private MongoCollection<Document> mongo;
     private SolrClient solr;
+    private WordNetFilter wnFilter;
 
     /* *****************************************************************
      * constructor
@@ -51,6 +56,12 @@ public class BatchInserter{
     public BatchInserter( String mongoCollection, String solrCore ){
         if( mongoCollection != null && !mongoCollection.isEmpty() ) mongo = MONGO_COLL_CREATOR.apply( mongoCollection );
         if( solrCore != null && !solrCore.isEmpty() ) solr = SOLR_CLIENT_CREATOR.apply( solrCore );
+
+        try{
+            wnFilter = new WordNetFilter();
+        }catch( Exception e ){
+            e.printStackTrace();
+        }
     }
 
 
@@ -161,6 +172,8 @@ public class BatchInserter{
                 }
             }//end for
 
+            solrProcessDoc( mongoDoc, solrDoc );
+
             // if empty, don't index
             if( solrDoc.isEmpty() ){
                 System.out.println( "Empty solr doc : " + mongoDoc );
@@ -174,6 +187,30 @@ public class BatchInserter{
             e.printStackTrace();
             return false;
         }
+    }
+
+
+
+
+    private void solrProcessDoc( Document mongoDoc, SolrInputDocument doc ){
+        List<String> tags = ( List<String> ) mongoDoc.get( IMG_TAGS_KEY );
+        doc.removeField( "tags" );
+        doc.addField( "row_tags", tags );
+        doc.addField( "tags", wnFilter.filterTags( tags ) );
+    }
+
+
+    private void solrProcessDocFilterChars( SolrInputDocument doc ){
+        Collection<Object> tags = doc.get( IMG_TAGS_KEY ).getValues();
+        List<String> ftags = new ArrayList<>();
+        for( Object tag : tags ){
+            String s = ( String ) tag;
+            if( s.matches( "^[a-zA-Z]{3,}$" ) ) ftags.add( s );
+        }//end for
+
+        doc.addField( "row_tags", tags );
+        doc.addField( "tags", ftags );
+
     }
 
     // ----------------------------------------------------

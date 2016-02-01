@@ -2,7 +2,7 @@ package derlin.symbiosart.api;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
-import derlin.symbiosart.api.commons.Constants;
+import derlin.symbiosart.Constants;
 import derlin.symbiosart.api.commons.Interfaces;
 import derlin.symbiosart.api.img.ImagesApi;
 import derlin.symbiosart.api.user.UsersApi;

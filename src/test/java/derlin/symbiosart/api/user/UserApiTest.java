@@ -1,6 +1,6 @@
 package derlin.symbiosart.api.user;
 
-import derlin.symbiosart.api.commons.Constants;
+import derlin.symbiosart.Constants;
 import derlin.symbiosart.api.commons.TagsVector;
 import org.junit.After;
 import org.junit.Before;

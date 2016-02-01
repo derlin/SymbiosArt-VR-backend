@@ -26,14 +26,9 @@ function MainCtrl( RestService, $interval, $q ){
 
 
     $interval( function(){
-
         var index = getRandomInt( 0, self.displayedImages.length );
         self.displayedImages[index] = self.images.pop();
-
-        //fetch().then( function(){
-        //    var index = getRandomInt( 0, self.displayedImages.length );
-        //    self.displayedImages[index] = self.images.pop();
-        //} );
+        if(self.images.length < 5) fetch();
     }, 10000 );
 
 
@@ -57,19 +52,22 @@ function MainCtrl( RestService, $interval, $q ){
         RestService.suggestions( {nbr: nbr}, self.tagsVector, function( result ){
             var n = 0;
             result.forEach( function( val ){
-                if( !self.seenIds[val._id] ){
+                if( val == undefined){
+                    console.log(val + " !!!!");
+                }else if( !self.seenIds[val._id] ){
                     self.seenIds[val._id] = true;
                     self.images.push( val );
                     n++;
                 }
-            }, function(error){
-                console.log(error);
-            } );
+            });
 
             console.log("added " + n + " images (" + self.images.length + ")");
 
             deferred.resolve();
-        } );
+
+        }, function(error){
+            console.log(error);
+        }  );
 
         return deferred.promise;
     }

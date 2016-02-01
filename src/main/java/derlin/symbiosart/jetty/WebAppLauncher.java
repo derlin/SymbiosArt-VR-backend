@@ -1,6 +1,6 @@
 package derlin.symbiosart.jetty;
 
-import derlin.symbiosart.api.commons.Constants;
+import derlin.symbiosart.Constants;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 

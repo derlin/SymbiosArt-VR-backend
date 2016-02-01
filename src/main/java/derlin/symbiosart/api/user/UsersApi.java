@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
-import static derlin.symbiosart.api.commons.Constants.ID_KEY;
+import static derlin.symbiosart.Constants.ID_KEY;
 import static derlin.symbiosart.api.user.User.MONGO_NAME_KEY;
 
 /**

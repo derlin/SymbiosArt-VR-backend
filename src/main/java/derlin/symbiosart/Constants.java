@@ -1,4 +1,4 @@
-package derlin.symbiosart.api.commons;
+package derlin.symbiosart;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -43,7 +43,7 @@ public class Constants{
     public final static int SOLR_PORT = 8983;
     public static final String[] SOLR_INDEXED_FIELDS = new String[]{ ID_KEY, IMG_TAGS_KEY, URL_KEY, "originalFormat" };
     public static final String SOLR_DEFAULT_CORE = "symbiosart";
-    public static final int MAX_TAGS_IN_SOLR_QUERY = 10;
+    public static final int MAX_TAGS_IN_SOLR_QUERY = 40;
 
     public static final Function<String, SolrClient> SOLR_CLIENT_CREATOR = ( core ) -> //
             new HttpSolrClient( String.format( "http://%s:%d/solr/%s", SOLR_HOST, SOLR_PORT, core ) );
