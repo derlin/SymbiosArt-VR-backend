@@ -73,7 +73,6 @@ all_images/*
 # IntelliJ
 out/
 target/
-res/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

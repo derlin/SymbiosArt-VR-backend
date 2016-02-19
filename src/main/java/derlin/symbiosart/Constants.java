@@ -2,6 +2,7 @@ package derlin.symbiosart;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import derlin.symbiosart.config.Config;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrDocument;
@@ -29,8 +30,8 @@ public class Constants{
     public static final String URL_KEY = "url";
 
     // mongo
-    public static final String MONGO_HOST = "localhost";
-    public final static String MONGO_DB = "symbiosart";
+    public static final String MONGO_HOST = Config.getProperty( "mongoHost" );
+    public final static String MONGO_DB = Config.getProperty( "mongoDb" );
     public final static Function<String, MongoCollection<Document>> MONGO_COLL_CREATOR = ( coll ) -> //
             new MongoClient( Constants.MONGO_HOST ).getDatabase( Constants.MONGO_DB ).getCollection( coll );
 
@@ -39,14 +40,12 @@ public class Constants{
 
 
     // solr
-    public final static String SOLR_HOST = "localhost"; //"dulcolax.local";
-    public final static int SOLR_PORT = 8983;
     public static final String[] SOLR_INDEXED_FIELDS = new String[]{ ID_KEY, IMG_TAGS_KEY, URL_KEY, "originalFormat" };
-    public static final String SOLR_DEFAULT_CORE = "symbiosart";
+    public static final String SOLR_DEFAULT_CORE = Config.getProperty( "solrCore" );
     public static final int MAX_TAGS_IN_SOLR_QUERY = 40;
 
     public static final Function<String, SolrClient> SOLR_CLIENT_CREATOR = ( core ) -> //
-            new HttpSolrClient( String.format( "http://%s:%d/solr/%s", SOLR_HOST, SOLR_PORT, core ) );
+            new HttpSolrClient( Config.getProperty( "solrUrl" ) + "/" + core );
 
     public static final Function<SolrDocument, Document> SOLR_TO_DOC_CONVERTOR = ( r ) -> {
         Document doc = new Document();
@@ -56,7 +55,8 @@ public class Constants{
 
 
     // rest server
-    public static final int SERVER_PORT = 8680;
-    public static final String SERVER_URL = "http://192.168.0.23:" + SERVER_PORT + "/";
+    public static final int SERVER_PORT = Config.getProperty( "serverPort", 80 );
+    public static final String SERVER_HOST = Config.getProperty( "serverHost" );
+    public static final String SERVER_URL = "http://" + SERVER_HOST + ":" + SERVER_PORT + "/";
 
 }//end class

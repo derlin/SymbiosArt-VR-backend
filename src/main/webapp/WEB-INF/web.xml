@@ -29,10 +29,6 @@
         <servlet-name>Static-Content</servlet-name>
         <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
         <init-param>
-            <param-name>resourceBase</param-name>
-            <param-value>/home/lucy/git/SymbiosArt/all_images</param-value>
-        </init-param>
-        <init-param>
             <param-name>dirAllowed</param-name>
             <param-value>true</param-value>
         </init-param>
