@@ -69,6 +69,7 @@ public class WordNetFilter{
             stream //
                     .map( Document::parse )  //
                     .map( d -> ( List<String> ) d.get( "tags" ) ) //
+                    .map(ts -> {System.out.print(ts + " => "); return ts; }) //
                     .map( f::filterTags ) //
                     .forEach( System.out::println );
 

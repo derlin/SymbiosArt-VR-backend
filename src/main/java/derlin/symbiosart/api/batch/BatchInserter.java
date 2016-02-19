@@ -11,8 +11,6 @@ import org.bson.Document;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -199,19 +197,6 @@ public class BatchInserter{
         doc.addField( "tags", wnFilter.filterTags( tags ) );
     }
 
-
-    private void solrProcessDocFilterChars( SolrInputDocument doc ){
-        Collection<Object> tags = doc.get( IMG_TAGS_KEY ).getValues();
-        List<String> ftags = new ArrayList<>();
-        for( Object tag : tags ){
-            String s = ( String ) tag;
-            if( s.matches( "^[a-zA-Z]{3,}$" ) ) ftags.add( s );
-        }//end for
-
-        doc.addField( "row_tags", tags );
-        doc.addField( "tags", ftags );
-
-    }
 
     // ----------------------------------------------------
 

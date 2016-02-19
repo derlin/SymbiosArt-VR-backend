@@ -38,7 +38,7 @@ public class BatchDownloader{
     private static final int DEFAULT_RESULTS = 100;
 
     public static void main( String[] args ){
-        if( args.length < 2 ) exitErr( "usage: targetDir tag[,tag]" );
+        if( args.length < 2 ) exitErr( "usage: targetDir tag[,tag]  [nbr of results]" );
 
         File dir = new File( args[ 0 ] );
         if( !dir.exists() && !dir.mkdir() ) exitErr( "Could not create dir " + dir.getPath() );
