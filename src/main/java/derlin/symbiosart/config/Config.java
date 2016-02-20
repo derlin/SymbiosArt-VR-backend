@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Properties;
  */
 public class Config{
 
-    private static final Logger LOG = LoggerFactory.getLogger( ConfigOrig.class );
+    private static final Logger LOG = LoggerFactory.getLogger( Config.class );
     private static final String CONF_FILE = "/symbiosart.properties";
     private static Properties properties;
 
@@ -32,7 +33,12 @@ public class Config{
             URL configFile = Config.class.getResource( file );
             if( configFile != null ){
                 properties.load( configFile.openStream() );
-                LOG.info( "Config file loaded." );
+                StringBuilder b = new StringBuilder();
+                for( Map.Entry<Object, Object> entry : properties.entrySet() ){
+                    b.append( "   " ).append( entry.getKey() ).append( "=" ).append( entry.getValue() ).append( "\n" );
+                }//end for
+                LOG.info( "Config file loaded. Properties: " + b.toString() );
+                System.out.println( b.toString() );
             }else{
                 LOG.info( "No config file." );
             }
