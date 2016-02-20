@@ -45,7 +45,7 @@
         <rpm.logdirpath>${rpm.apprefix}/${rpm.logdirname}</rpm.logdirpath>
         <rpm.appname>${project.artifactId}</rpm.appname>
         <rpm.basedir>${project.artifactId}</rpm.basedir>
-        <rpm.distribution>Symbiosart Immersion</rpm.distribution>
+        <rpm.distribution>SymbiosartImmersion</rpm.distribution>
     </properties>
 
     <packaging>jar</packaging>
