@@ -7,6 +7,7 @@
     <artifactId>SymbiosArt-JettyServer</artifactId>
     <version>1.0</version>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.version>1.0</project.version>
@@ -49,162 +50,197 @@
 
     <packaging>jar</packaging>
 
+    <profiles>
+        <profile>
+            <id>fatJar</id>
+            <build>
+                <!--  include config to jar -->
+                <resources>
+                    <resource>
+                        <directory>src/main/config</directory>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-my-bundle</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptorRefs>
+                                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                                    </descriptorRefs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+
+            </build>
+        </profile>
+
+        <profile>
+            <id>rpm</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!--copy deps to /target/lib-->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>${maven.dependency.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <!-- See here for more details https://gist.github.com/killerwhile/95c49fb0af0e938de222 -->
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>runtime</includeScope>
+                            <!--excludeTransitive>false</excludeTransitive-->
+                            <stripVersion>false</stripVersion>
+                            <excludeScope>provided</excludeScope>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <!--create an rpm-->
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>rpm-maven-plugin</artifactId>
+                        <version>${maven.rpm.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>attached-rpm</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <copyright>${rpm.copyright}</copyright>
+                            <distribution>${rpm.distribution}</distribution>
+                            <group>${rpm.group}</group>
+                            <needarch>${rpm.targetArch}</needarch>
+                            <classifier>${rpm.targetos}.${rpm.targetArch}</classifier>
+                            <name>${rpm.appname}</name>
+                            <release>${version}</release>
+                            <defineStatements>
+                                <defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
+                                <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+                            </defineStatements>
+                            <mappings>
+                                <mapping>
+                                    <directory>${rpm.apprefix}</directory>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                </mapping>
+                                <!-- Top level directory -->
+                                <mapping>
+                                    <directory>${rpm.path}</directory>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                </mapping>
+                                <!-- set all directory permissions -->
+                                <mapping>
+                                    <configuration>true</configuration>
+                                    <directory>${rpm.path}/config</directory>
+                                    <recurseDirectories>true</recurseDirectories>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                </mapping>
+                                <mapping>
+                                    <directory>${rpm.path}/bin</directory>
+                                    <recurseDirectories>true</recurseDirectories>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                </mapping>
+                                <mapping>
+                                    <directory>${rpm.path}/lib</directory>
+                                    <recurseDirectories>true</recurseDirectories>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>
+                                                ${project.build.directory}/${project.artifactId}-${project.version}.jar
+                                            </location>
+                                        </source>
+                                        <source>
+                                            <location>${project.build.directory}/lib/</location>
+                                        </source>
+                                        <softlinkSource>
+                                            <destination>${project.artifactId}.jar</destination>
+                                            <location>${project.artifactId}-${project.version}.jar</location>
+                                        </softlinkSource>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>${rpm.path}/logs</directory>
+                                    <recurseDirectories>true</recurseDirectories>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                </mapping>
+                                <!-- We exclude the dir because the perms were defined above recursively -->
+                                <mapping>
+                                    <configuration>true</configuration>
+                                    <directory>${rpm.path}/config</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <filemode>0644</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>${project.basedir}/src/main/config</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <!-- We exclude the dir because the perms were defined above recursively -->
+                                <mapping>
+                                    <directory>${rpm.path}/bin</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <filemode>0755</filemode>
+                                    <username>${rpm.username}</username>
+                                    <groupname>${rpm.groupname}</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>${project.basedir}/src/main/scripts</location>
+                                            <!-- This prevents RPM python build failure on Jenkins -->
+                                            <excludes>
+                                                <exclude>*.pyc</exclude>
+                                                <exclude>*.pyo</exclude>
+                                            </excludes>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                            </mappings>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
     <build>
-        <!-- if not RPM -->
-        <resources>
-            <resource>
-                <directory>src/main/config</directory>
-            </resource>
-        </resources>
 
         <plugins>
-            <plugin>
-                <!--include dependencies inside jar (fat jar)-->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven.dependency.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                    <!-- See here for more details https://gist.github.com/killerwhile/95c49fb0af0e938de222 -->
-                    <overWriteReleases>false</overWriteReleases>
-                    <overWriteSnapshots>false</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
-                    <includeScope>runtime</includeScope>
-                    <!--excludeTransitive>false</excludeTransitive-->
-                    <stripVersion>false</stripVersion>
-                    <excludeScope>provided</excludeScope>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!--create an rpm-->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>rpm-maven-plugin</artifactId>
-                <version>${maven.rpm.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>attached-rpm</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <copyright>${rpm.copyright}</copyright>
-                    <distribution>${rpm.distribution}</distribution>
-                    <group>${rpm.group}</group>
-                    <needarch>${rpm.targetArch}</needarch>
-                    <classifier>${rpm.targetos}.${rpm.targetArch}</classifier>
-                    <name>${rpm.appname}</name>
-                    <release>${version}</release>
-                    <defineStatements>
-                        <defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
-                        <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
-                    </defineStatements>
-                    <mappings>
-                        <mapping>
-                            <directory>${rpm.apprefix}</directory>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                        </mapping>
-                        <!-- Top level directory -->
-                        <!--Remember ALWAYS ensure that the base dir managed by RPM is the
-                            top level directory of the tool itself. Do NOT specify /app or /app/vscc
-                            on its own for example as this top level VSCC directory is shared across
-                            all VSCC tools and should NEVER be owned by RPM. Think of it as /usr/local
-                            etc -->
-                        <mapping>
-                            <directory>${rpm.path}</directory>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                        </mapping>
-                        <!-- set all directory permissions -->
-                        <mapping>
-                            <configuration>true</configuration>
-                            <directory>${rpm.path}/config</directory>
-                            <recurseDirectories>true</recurseDirectories>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                        </mapping>
-                        <mapping>
-                            <directory>${rpm.path}/bin</directory>
-                            <recurseDirectories>true</recurseDirectories>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                        </mapping>
-                        <mapping>
-                            <directory>${rpm.path}/lib</directory>
-                            <recurseDirectories>true</recurseDirectories>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                            <sources>
-                                <source>
-                                    <location>${project.build.directory}/${project.artifactId}-${project.version}.jar
-                                    </location>
-                                </source>
-                                <source>
-                                    <location>${project.build.directory}/lib/</location>
-                                </source>
-                                <softlinkSource>
-                                    <destination>${project.artifactId}.jar</destination>
-                                    <location>${project.artifactId}-${project.version}.jar</location>
-                                </softlinkSource>
-                            </sources>
-                        </mapping>
-                        <mapping>
-                            <directory>${rpm.path}/logs</directory>
-                            <recurseDirectories>true</recurseDirectories>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                        </mapping>
-                        <!-- We exclude the dir because the perms were defined above recursively -->
-                        <mapping>
-                            <configuration>true</configuration>
-                            <directory>${rpm.path}/config</directory>
-                            <directoryIncluded>false</directoryIncluded>
-                            <filemode>0644</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                            <sources>
-                                <source>
-                                    <location>${project.basedir}/src/main/config</location>
-                                </source>
-                            </sources>
-                        </mapping>
-                        <!-- We exclude the dir because the perms were defined above recursively -->
-                        <mapping>
-                            <directory>${rpm.path}/bin</directory>
-                            <directoryIncluded>false</directoryIncluded>
-                            <filemode>0755</filemode>
-                            <username>${rpm.username}</username>
-                            <groupname>${rpm.groupname}</groupname>
-                            <sources>
-                                <source>
-                                    <location>${project.basedir}/src/main/scripts</location>
-                                    <!-- This prevents RPM python build failure on Jenkins -->
-                                    <excludes>
-                                        <exclude>*.pyc</exclude>
-                                        <exclude>*.pyo</exclude>
-                                    </excludes>
-                                </source>
-                            </sources>
-                        </mapping>
-                    </mappings>
-                </configuration>
-            </plugin>
+
 
             <plugin>
                 <!-- Build an executable JAR -->
