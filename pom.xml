@@ -19,7 +19,6 @@
 
         <!--deps versions-->
         <mongo.version>3.2.0</mongo.version>
-        <mongojack.version>2.5.0</mongojack.version>
         <solr.version>5.2.1</solr.version>
         <jetty.version>9.3.4.RC1</jetty.version>
         <slf4j.version>1.7.5</slf4j.version>
@@ -335,19 +334,19 @@
             <version>${mongo.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.fakemongo</groupId>
-            <artifactId>fongo</artifactId>
-            <version>${fongo.version}</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.github.fakemongo</groupId>-->
+            <!--<artifactId>fongo</artifactId>-->
+            <!--<version>${fongo.version}</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
 
         <!--gson-->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.gson</groupId>-->
+            <!--<artifactId>gson</artifactId>-->
+            <!--<version>${gson.version}</version>-->
+        <!--</dependency>-->
 
         <!--solr-->
         <dependency>
