@@ -8,9 +8,9 @@
     when: symbiosarttesting is not defined
 
 # for testing
-  - get_url: url=https://jenkins.daplab.ch/job/SymbiosArt-JettyServer/lastSuccessfulBuild/SymbiosArt$SymbiosArt-JettyServer/artifact/SymbiosArt/SymbiosArt-JettyServer/{{ symbiosart_version}}/SymbiosArt-JettyServer-{{ symbiosart_version}}-el6.x86_64.rpm dest=/tmp url_password=daplab url_username=jenkins
+  - get_url: url=https://jenkins.daplab.ch/job/SymbiosArt-JettyServer-bperroud/lastSuccessfulBuild/artifact/target/rpm/SymbiosArt-JettyServer-el6.x86_64/RPMS/x86_64/SymbiosArt-JettyServer-{{ symbiosart_version }}.x86_64.rpm dest=/tmp url_password=daplab url_username=jenkins
     when: symbiosarttesting is defined
-  - yum: name=/tmp/SymbiosArt-JettyServer-{{ symbiosart_version}}-el6.x86_64.rpm state=installed
+  - yum: name=/tmp/SymbiosArt-JettyServer-{{ symbiosart_version}}.x86_64.rpm state=installed
     sudo: true
     when: symbiosarttesting is defined
 
