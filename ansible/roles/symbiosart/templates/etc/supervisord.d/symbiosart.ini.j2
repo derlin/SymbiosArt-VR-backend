@@ -1,0 +1,13 @@
+[program:symbiosart]
+command=/opt/symbiosart/bin/symbiosart.sh
+autostart=true
+autorestart=true
+startsecs=10
+startretries=3
+user={{ symbiosart_user }}
+stdout_logfile=/opt/symbiosart/logs/supervisord.out.log
+stdout_logfile_maxbytes=10000000
+stdout_logfile_backups=5
+stderr_logfile=/opt/symbiosart/logs/supervisord.err.log
+stderr_logfile_maxbytes=10000000
+stderr_logfile_backups=5

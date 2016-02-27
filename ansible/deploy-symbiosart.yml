@@ -1,0 +1,8 @@
+# ansible-playbook -i inventories/prod.ini deploy-twitter-to-kafka.yml -s 
+# -e twittertokafkatesting=true 
+---
+
+- hosts: pubgw1.daplab.ch
+
+  roles:
+    - { role: symbiosart }

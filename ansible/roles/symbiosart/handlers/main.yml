@@ -1,0 +1,8 @@
+- name: restart symbiosart
+  supervisorctl: name=symbiosart state=restarted
+  sudo: yes
+  ignore_errors: true
+
+- name: symbiosart started
+  supervisorctl: name=symbiosart state=started
+  sudo: true

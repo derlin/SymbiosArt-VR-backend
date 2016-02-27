@@ -1,0 +1,28 @@
+---
+    
+  - yum: name=symbiosart-{{ symbiosart_version }} state=present disable_gpg_check=yes
+    sudo: true
+    notify:
+      - symbiosart started
+      - restart symbiosart
+    when: symbiosarttesting is not defined
+
+# for testing
+  - get_url: url=https://jenkins.daplab.ch/job/SymbiosArt-JettyServer/lastSuccessfulBuild/SymbiosArt$SymbiosArt-JettyServer/artifact/SymbiosArt/SymbiosArt-JettyServer/{{ symbiosart_version}}/SymbiosArt-JettyServer-{{ symbiosart_version}}-el6.x86_64.rpm dest=/tmp url_password=daplab url_username=jenkins
+    when: symbiosarttesting is defined
+  - yum: name=/tmp/SymbiosArt-JettyServer-{{ symbiosart_version}}-el6.x86_64.rpm state=installed
+    sudo: true
+    when: symbiosarttesting is defined
+
+
+  - template: src=etc/supervisord.d/symbiosart.ini.j2 dest=/etc/supervisord.d/symbiosart.ini
+    sudo: true
+    notify:
+      - symbiosart started
+      - restart symbiosart
+
+  - supervisorctl: name=symbiosart state=present
+    sudo: true
+    notify:
+      - symbiosart started
+      - restart symbiosart
