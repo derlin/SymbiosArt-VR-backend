@@ -36,6 +36,9 @@ fi
 JAVA_OPTS="$JAVA_OPTS -Dlogback.configurationFile=logback.xml"
 #JAVA_OPTS="$JAVA_OPTS -Dlog4j.configuration=log4j-production.properties"
 
+export HADOOP_OPTS=$JAVA_OPTS
+export HADOOP_CLASSPATH=$OUR_CLASSPATH
+
 command="hadoop jar $LIBDIR/SymbiosArt-JettyServer.jar"
 
 echo $command $@
