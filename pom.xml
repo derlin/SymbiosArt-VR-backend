@@ -35,8 +35,8 @@
         <rpm.group>Application/Internet</rpm.group>
         <rpm.rootprefix>/opt/symbiosart</rpm.rootprefix>
         <rpm.apprefix>${rpm.rootprefix}</rpm.apprefix>
-        <rpm.username>lucy</rpm.username>
-        <rpm.groupname>lucy</rpm.groupname>
+        <rpm.username>linder</rpm.username>
+        <rpm.groupname>daplab_users</rpm.groupname>
         <rpm.logdirname>logs</rpm.logdirname>
         <rpm.targetos>el6</rpm.targetos>
         <rpm.targetArch>x86_64</rpm.targetArch>
@@ -50,6 +50,18 @@
     <packaging>jar</packaging>
 
     <profiles>
+        <profile>
+            <id>rpmRelease.defaultValue</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!rpmRelease</name>
+                </property>
+            </activation>
+            <properties>
+                <rpmRelease>1</rpmRelease>
+            </properties>
+        </profile>
         <profile>
             <id>fatJar</id>
             <build>
@@ -132,7 +144,10 @@
                             <needarch>${rpm.targetArch}</needarch>
                             <classifier>${rpm.targetos}.${rpm.targetArch}</classifier>
                             <name>${rpm.appname}</name>
-                            <release>${version}</release>
+                            <version>
+                                ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+                            </version>
+                            <release>${rpmRelease}</release>
                             <defineStatements>
                                 <defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
@@ -240,7 +255,19 @@
 
         <plugins>
 
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <!-- Build an executable JAR -->
                 <groupId>org.apache.maven.plugins</groupId>
