@@ -35,7 +35,7 @@
         <rpm.group>Application/Internet</rpm.group>
         <rpm.rootprefix>/opt/symbiosart</rpm.rootprefix>
         <rpm.apprefix>${rpm.rootprefix}</rpm.apprefix>
-        <rpm.username>linder</rpm.username>
+        <rpm.username>llinder</rpm.username>
         <rpm.groupname>daplab_users</rpm.groupname>
         <rpm.logdirname>logs</rpm.logdirname>
         <rpm.targetos>el6</rpm.targetos>
